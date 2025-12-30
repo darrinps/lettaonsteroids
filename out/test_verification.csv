@@ -1,0 +1,11 @@
+backend,scenario,mean_latency_ms,accuracy,mean_similarity
+letta,conditional_memory_updates,3981.585829,1.0,0.704151
+letta,cross_session_recall,5981.9897,1.0,0.809525
+letta,degradation_resilience,10377.6743,1.0,0.807781
+letta,memory_editing_governance,4772.8517,1.0,0.650072
+letta,memory_scalability,5591.42854,0.0,0.647349
+letta,multi_fact_inference,4290.675125,1.0,0.774992
+letta,personality_consistency,4695.432925,0.75,0.702163
+letta,task_continuity,3053.434033,1.0,0.828846
+letta,temporal_conflict_resolution,3788.83685,1.0,0.724236
+letta,AVERAGE,5170.434334,0.861111,0.738791

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Remove-Item \"C:\\AI_Work\\letta_on_steroids\\letta_hybrid_poc\\WINDOWS_SETUP.md\")",
+      "Bash(if [ -f \"WINDOWS_SETUP.md\" ])",
+      "Bash(then rm \"WINDOWS_SETUP.md\")",
+      "Bash(else echo \"WINDOWS_SETUP.md does not exist\")",
+      "Bash(fi)",
+      "Bash(poetry run python:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

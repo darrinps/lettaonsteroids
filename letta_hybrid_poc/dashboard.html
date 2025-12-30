@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letta Hybrid - Evaluation Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div id="modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Server Offline</h2>
+            <p>The evaluation server is not running. Please start it by running <code>start_server.bat</code> in your terminal.</p>
+            <p>Once the server is running, you can close this message and try again.</p>
+            <div class="modal-buttons">
+                <button id="close-modal-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Letta Hybrid Evaluation</h1>
+            <div class="controls">
+                <button id="start-btn">Start Evaluation</button>
+                <button id="reset-btn" disabled>Reset</button>
+                <button id="stop-btn" disabled>Stop Evaluation</button>
+                <button id="overview-btn">Eval Overview</button>
+            </div>
+        </header>
+        <main>
+            <div id="scene-container">
+                <div id="star-wars-container">
+                    <div id="loading-message">Loading evaluation overview...</div>
+                    <div id="star-wars-crawl">
+                        <div id="crawl-content"></div>
+                    </div>
+                    <button id="pause-crawl-btn">Pause</button>
+                </div>
+            </div>
+            <div id="results-container">
+                <h2>Progress Log</h2>
+                <div id="progress-log"></div>
+                <h2>Results</h2>
+                <div id="results-log"></div>
+                <div id="summary"></div>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

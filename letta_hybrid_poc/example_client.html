@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Four-Way Fair Comparison - Evaluation UI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        button.stop {
+            background-color: #dc3545;
+        }
+        button.stop:hover {
+            background-color: #c82333;
+        }
+        .status {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-idle { background-color: #6c757d; color: white; }
+        .status-running { background-color: #28a745; color: white; }
+        .status-completed { background-color: #17a2b8; color: white; }
+        .status-error { background-color: #dc3545; color: white; }
+        .log {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            height: 500px;
+            overflow-y: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .log-entry {
+            margin: 4px 0;
+        }
+        .log-connected { color: #4ec9b0; }
+        .log-started { color: #569cd6; }
+        .log-query { color: #dcdcaa; }
+        .log-complete { color: #4ec9b0; }
+        .log-error { color: #f48771; }
+        .metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .metric-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .metric-card.baseline h3 {
+            color: #856404;
+        }
+        .metric-card.baseline .metric-value {
+            color: #ffc107;
+        }
+        .metric-card.mem0 h3 {
+            color: #004085;
+        }
+        .metric-card.mem0 .metric-value {
+            color: #0066cc;
+        }
+        .metric-card.mem0-enhanced h3 {
+            color: #6f42c1;
+        }
+        .metric-card.mem0-enhanced .metric-value {
+            color: #9b59b6;
+        }
+        .metric-card.letta h3 {
+            color: #155724;
+        }
+        .metric-card.letta .metric-value {
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <h1>Four-Way Fair Comparison: Baseline vs Mem0 vs Mem0+ vs Letta</h1>
+
+    <div class="controls">
+        <h3>Controls</h3>
+        <button id="startBtn" onclick="startEvaluation()">Start Evaluation</button>
+        <button id="stopBtn" class="stop" onclick="stopEvaluation()" disabled>Stop Evaluation</button>
+        <button onclick="getStatus()">Get Status</button>
+        <button onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <div class="status">
+        <h3>Status: <span id="statusBadge" class="status-badge status-idle">Idle</span></h3>
+        <p>Query: <span id="currentQuery">-</span> / <span id="totalQueries">-</span></p>
+    </div>
+
+    <div class="metrics">
+        <div class="metric-card baseline">
+            <h3>Baseline<br/><small>(Keyword)</small></h3>
+            <p>Avg Latency: <span class="metric-value" id="baselineLatency">-</span> ms</p>
+            <p>Avg Recall@5: <span class="metric-value" id="baselineRecall">-</span></p>
+        </div>
+        <div class="metric-card mem0">
+            <h3>Mem0<br/><small>(Basic)</small></h3>
+            <p>Avg Latency: <span class="metric-value" id="mem0Latency">-</span> ms</p>
+            <p>Avg Recall@5: <span class="metric-value" id="mem0Recall">-</span></p>
+            <p id="mem0Status" style="font-size: 11px; color: #666; margin-top: 8px;"></p>
+        </div>
+        <div class="metric-card mem0-enhanced">
+            <h3>Mem0<br/><small>(+Enhancements)</small></h3>
+            <p>Avg Latency: <span class="metric-value" id="mem0EnhancedLatency">-</span> ms</p>
+            <p>Avg Recall@5: <span class="metric-value" id="mem0EnhancedRecall">-</span></p>
+            <p id="mem0EnhancedStatus" style="font-size: 11px; color: #666; margin-top: 8px;"></p>
+        </div>
+        <div class="metric-card letta">
+            <h3>Letta<br/><small>(Hybrid+All)</small></h3>
+            <p>Avg Latency: <span class="metric-value" id="lettaLatency">-</span> ms</p>
+            <p>Avg Recall@5: <span class="metric-value" id="lettaRecall">-</span></p>
+        </div>
+    </div>
+
+    <h3>Event Log</h3>
+    <div class="log" id="log"></div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let eventSource = null;
+
+        function log(message, className = '') {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${className}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        function updateStatus(status) {
+            const badge = document.getElementById('statusBadge');
+            badge.textContent = status;
+            badge.className = `status-badge status-${status}`;
+        }
+
+        async function startEvaluation() {
+            try {
+                log('Starting evaluation...', 'log-started');
+
+                const response = await fetch(`${API_BASE}/api/eval/start`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        provider: 'openai',
+                        openai_model: 'gpt-4o-mini',
+                        top_k: 5
+                    })
+                });
+
+                const data = await response.json();
+                log(`Started: ${data.message}`, 'log-started');
+
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+
+                // Connect to SSE stream
+                connectSSE();
+
+            } catch (error) {
+                log(`Error: ${error.message}`, 'log-error');
+            }
+        }
+
+        function connectSSE() {
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            log('Connecting to event stream...', 'log-connected');
+
+            eventSource = new EventSource(`${API_BASE}/api/eval/stream`);
+
+            eventSource.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    handleEvent(data);
+                } catch (error) {
+                    console.error('Error parsing event:', error);
+                }
+            };
+
+            eventSource.onerror = (error) => {
+                log('Stream connection error', 'log-error');
+                eventSource.close();
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = true;
+            };
+        }
+
+        function handleEvent(data) {
+            const type = data.type;
+
+            switch (type) {
+                case 'connected':
+                    log(`Connected (Status: ${data.status})`, 'log-connected');
+                    updateStatus(data.status);
+                    break;
+
+                case 'evaluation_started':
+                    log(`Evaluation started: ${data.total_queries} queries with ${data.provider} (${data.model})`, 'log-started');
+                    document.getElementById('totalQueries').textContent = data.total_queries;
+                    updateStatus('running');
+                    break;
+
+                case 'system_loading':
+                    log('Loading system components...', 'log-query');
+                    break;
+
+                case 'system_loaded':
+                    log('System loaded and ready', 'log-complete');
+                    break;
+
+                case 'query_started':
+                    log(`Query ${data.index}/${data.total}: ${data.query}`, 'log-query');
+                    document.getElementById('currentQuery').textContent = data.index;
+                    break;
+
+                case 'query_completed':
+                    const baseline = data.baseline;
+                    const letta = data.letta;
+                    const mem0 = data.mem0;
+                    const mem0Enhanced = data.mem0_enhanced;
+
+                    log(`  Baseline:      ${baseline.latency_ms.toFixed(0)}ms, Recall: ${baseline.recall_at_k.toFixed(2)}`, 'log-complete');
+                    if (mem0) {
+                        log(`  Mem0 (Basic):  ${mem0.latency_ms.toFixed(0)}ms, Recall: ${mem0.recall_at_k.toFixed(2)}`, 'log-complete');
+                    }
+                    if (mem0Enhanced) {
+                        log(`  Mem0 (Enh):    ${mem0Enhanced.latency_ms.toFixed(0)}ms, Recall: ${mem0Enhanced.recall_at_k.toFixed(2)}`, 'log-complete');
+                    }
+                    log(`  Letta:         ${letta.latency_ms.toFixed(0)}ms, Recall: ${letta.recall_at_k.toFixed(2)}`, 'log-complete');
+                    break;
+
+                case 'evaluation_completed':
+                    const metrics = data.aggregate_metrics;
+                    log('='.repeat(60), 'log-complete');
+                    log('EVALUATION COMPLETE', 'log-complete');
+                    log('='.repeat(60), 'log-complete');
+                    log(`Duration: ${data.duration_seconds.toFixed(1)}s`, 'log-complete');
+
+                    // Update Baseline metrics
+                    document.getElementById('baselineLatency').textContent =
+                        metrics.baseline.avg_latency_ms.toFixed(0);
+                    document.getElementById('baselineRecall').textContent =
+                        metrics.baseline.avg_recall_at_k.toFixed(3);
+
+                    // Update Mem0 Basic metrics if available
+                    if (metrics.mem0) {
+                        document.getElementById('mem0Latency').textContent =
+                            metrics.mem0.avg_latency_ms.toFixed(0);
+                        document.getElementById('mem0Recall').textContent =
+                            metrics.mem0.avg_recall_at_k.toFixed(3);
+                        document.getElementById('mem0Status').textContent = '✓ Available';
+                        document.getElementById('mem0Status').style.color = '#28a745';
+                    } else {
+                        document.getElementById('mem0Latency').textContent = '-';
+                        document.getElementById('mem0Recall').textContent = '-';
+                        document.getElementById('mem0Status').textContent = 'Not configured';
+                        document.getElementById('mem0Status').style.color = '#dc3545';
+                    }
+
+                    // Update Mem0 Enhanced metrics if available
+                    if (metrics.mem0_enhanced) {
+                        document.getElementById('mem0EnhancedLatency').textContent =
+                            metrics.mem0_enhanced.avg_latency_ms.toFixed(0);
+                        document.getElementById('mem0EnhancedRecall').textContent =
+                            metrics.mem0_enhanced.avg_recall_at_k.toFixed(3);
+                        document.getElementById('mem0EnhancedStatus').textContent = '✓ Available';
+                        document.getElementById('mem0EnhancedStatus').style.color = '#28a745';
+                    } else {
+                        document.getElementById('mem0EnhancedLatency').textContent = '-';
+                        document.getElementById('mem0EnhancedRecall').textContent = '-';
+                        document.getElementById('mem0EnhancedStatus').textContent = 'Not configured';
+                        document.getElementById('mem0EnhancedStatus').style.color = '#dc3545';
+                    }
+
+                    // Update Letta metrics
+                    document.getElementById('lettaLatency').textContent =
+                        metrics.letta.avg_latency_ms.toFixed(0);
+                    document.getElementById('lettaRecall').textContent =
+                        metrics.letta.avg_recall_at_k.toFixed(3);
+
+                    updateStatus('completed');
+                    document.getElementById('startBtn').disabled = false;
+                    document.getElementById('stopBtn').disabled = true;
+                    eventSource.close();
+                    break;
+
+                case 'evaluation_error':
+                    log(`ERROR: ${data.error}`, 'log-error');
+                    updateStatus('error');
+                    document.getElementById('startBtn').disabled = false;
+                    document.getElementById('stopBtn').disabled = true;
+                    eventSource.close();
+                    break;
+
+                case 'evaluation_stopped':
+                    log(`Evaluation stopped (${data.completed_queries} queries completed)`, 'log-error');
+                    updateStatus('stopped');
+                    document.getElementById('startBtn').disabled = false;
+                    document.getElementById('stopBtn').disabled = true;
+                    eventSource.close();
+                    break;
+            }
+        }
+
+        async function stopEvaluation() {
+            try {
+                log('Requesting stop...', 'log-error');
+
+                const response = await fetch(`${API_BASE}/api/eval/stop`, {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+                log(`Stop requested: ${data.message}`, 'log-error');
+
+            } catch (error) {
+                log(`Error: ${error.message}`, 'log-error');
+            }
+        }
+
+        async function getStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/api/eval/status`);
+                const data = await response.json();
+                log(`Status: ${JSON.stringify(data, null, 2)}`, 'log-query');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'log-error');
+            }
+        }
+
+        // Initial status check
+        window.onload = async () => {
+            try {
+                const response = await fetch(API_BASE);
+                const data = await response.json();
+                log(`Connected to ${data.name} v${data.version}`, 'log-connected');
+            } catch (error) {
+                log('Cannot connect to API server. Start with: poetry run python -m src.api.server', 'log-error');
+            }
+        };
+    </script>
+</body>
+</html>

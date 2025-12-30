@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+body {
+    font-family: 'Orbitron', sans-serif;
+    background-color: #0a0a1a;
+    color: #00f0ff;
+    margin: 0;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #00f0ff;
+    padding-bottom: 10px;
+    text-shadow: 0 0 10px #00f0ff;
+}
+
+h1 {
+    margin: 0;
+    font-weight: 700;
+}
+
+.controls button {
+    font-family: 'Orbitron', sans-serif;
+    background-color: transparent;
+    border: 2px solid #00f0ff;
+    color: #00f0ff;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.controls button:hover:not(:disabled) {
+    background-color: #00f0ff;
+    color: #0a0a1a;
+    box-shadow: 0 0 15px #00f0ff;
+}
+
+.controls button:disabled {
+    border-color: #555;
+    color: #555;
+    cursor: not-allowed;
+}
+
+main {
+    display: flex;
+    flex-grow: 1;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+#scene-container {
+    flex-grow: 1;
+    border: 1px solid #00f0ff;
+    box-shadow: inset 0 0 15px #00f0ff;
+    position: relative;
+}
+
+#results-container {
+    width: 400px;
+    border: 1px solid #00f0ff;
+    padding: 20px;
+    box-shadow: 0 0 15px #00f0ff;
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    margin-top: 0;
+    text-align: center;
+    text-shadow: 0 0 5px #00f0ff;
+}
+
+#progress-log {
+    max-height: 150px;
+    overflow-y: auto;
+    font-size: 0.85em;
+    background-color: #0f0f1f;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #00f0ff33;
+    font-family: 'Courier New', monospace;
+}
+
+#progress-log .log-entry {
+    margin: 2px 0;
+    color: #00ff88;
+}
+
+#results-log {
+    flex-grow: 1;
+    overflow-y: auto;
+    font-size: 0.9em;
+}
+
+.result-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #333;
+}
+
+.result-item p {
+    margin: 5px 0;
+}
+
+.winner {
+    color: #00ff00;
+    text-shadow: 0 0 5px #00ff00;
+}
+
+#summary {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #00f0ff;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 10, 26, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #0a0a1a;
+    border: 2px solid #00f0ff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 25px #00f0ff;
+    text-align: center;
+    max-width: 500px;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content code {
+    background-color: #000;
+    border: 1px solid #00f0ff;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: #00ff00;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+}
+
+.modal-buttons button {
+    font-family: 'Orbitron', sans-serif;
+    background-color: transparent;
+    border: 2px solid #00f0ff;
+    color: #00f0ff;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-buttons button:hover {
+    background-color: #00f0ff;
+    color: #0a0a1a;
+    box-shadow: 0 0 15px #00f0ff;
+}
+
+#star-wars-container {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    perspective: 400px;
+    z-index: 10000;
+    /* pointer-events: none; */ /* Allow clicks on the button */
+}
+
+#loading-message {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5em;
+    color: #feda4a;
+    text-align: center;
+    z-index: 10001;
+}
+
+#pause-crawl-btn {
+    display: none; /* Not used - Eval Overview button handles pause/resume */
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10002;
+    font-family: 'Orbitron', sans-serif;
+    background-color: transparent;
+    border: 2px solid #feda4a;
+    color: #feda4a;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#pause-crawl-btn:hover {
+    background-color: #feda4a;
+    color: #0a0a1a;
+    box-shadow: 0 0 15px #feda4a;
+}
+
+#crawl-content {
+    font-size: 2.5em;
+    text-align: justify;
+    color: #feda4a;
+    transform: rotateX(25deg);
+    padding-left: 1em;
+}
+
+@keyframes crawl {
+    0% {
+        top: 100%;
+    }
+    100% {
+        top: -100%;
+    }
+}
+
+#star-wars-crawl {
+    position: relative;
+    top: 100%;
+    transform-origin: 50% 100%;
+    animation: crawl 20s linear;
+    animation-fill-mode: forwards;
+}

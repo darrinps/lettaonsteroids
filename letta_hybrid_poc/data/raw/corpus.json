@@ -1,0 +1,77 @@
+[
+  {
+    "id": "doc_001",
+    "title": "ABAC vs RBAC Access Control",
+    "content": "Attribute-Based Access Control (ABAC) provides fine-grained access control based on attributes of users, resources, and environment. Unlike Role-Based Access Control (RBAC) which assigns permissions through roles, ABAC evaluates policies using boolean expressions over attributes. Cedar is a policy language developed by AWS for ABAC that uses a declarative syntax to express authorization logic. Cedar policies consist of permit or forbid effects with principal, action, resource, and optional conditions."
+  },
+  {
+    "id": "doc_002",
+    "title": "Cedar Policy Language Syntax",
+    "content": "Cedar policies are written using a simple syntax. A basic policy has this structure: permit(principal, action, resource) when { condition }; The principal specifies who can perform the action, action defines what operation, and resource identifies the target. Conditions use attributes like principal.department == 'engineering' or resource.sensitivity_level < 3. Cedar supports hierarchies, so principals and resources can be organized in parent-child relationships."
+  },
+  {
+    "id": "doc_003",
+    "title": "ADA Compliance for Virtual Platforms",
+    "content": "The Americans with Disabilities Act (ADA) requires that virtual platforms and digital services be accessible to people with disabilities. For virtual platform libraries (VPL), this means implementing WCAG 2.1 Level AA standards. Key requirements include: keyboard navigation support, screen reader compatibility, sufficient color contrast ratios (4.5:1 for normal text), alternative text for images, captions for video content, and semantic HTML markup. Testing should involve both automated tools and manual testing with assistive technologies."
+  },
+  {
+    "id": "doc_004",
+    "title": "WCAG 2.1 Level AA Requirements",
+    "content": "Web Content Accessibility Guidelines (WCAG) 2.1 Level AA includes several critical success criteria. Contrast ratios must be at least 4.5:1 for normal text and 3:1 for large text. All functionality must be keyboard accessible. Forms need proper labels and error identification. Time limits should be adjustable. Content must not flash more than 3 times per second. Pages need descriptive titles and headings. Focus indicators must be visible. These requirements ensure virtual platforms are usable by people with various disabilities including visual, auditory, motor, and cognitive impairments."
+  },
+  {
+    "id": "doc_005",
+    "title": "Medical Spa Service Offerings",
+    "content": "Modern medical spas offer a range of aesthetic treatments combining medical procedures with spa relaxation. Common services include Botox and dermal fillers for wrinkle reduction, laser hair removal, chemical peels for skin rejuvenation, microneedling to improve skin texture, and body contouring treatments like CoolSculpting. These procedures are typically performed by licensed medical professionals including dermatologists, plastic surgeons, or trained nurse practitioners under physician supervision."
+  },
+  {
+    "id": "doc_006",
+    "title": "Botox Treatment Guidelines",
+    "content": "Botox (botulinum toxin) is a prescription medicine injected into muscles to temporarily improve the appearance of moderate to severe frown lines, crow's feet, and forehead lines. The treatment takes about 10-20 minutes with minimal downtime. Results typically appear within 3-5 days and last 3-4 months. Common injection sites include the glabella (between eyebrows), lateral canthal lines (crow's feet), and frontalis (forehead). Patients should avoid lying down for 4 hours post-treatment and refrain from strenuous exercise for 24 hours. Side effects may include temporary bruising, headache, or eyelid drooping."
+  },
+  {
+    "id": "doc_007",
+    "title": "CoolSculpting Fat Reduction Process",
+    "content": "CoolSculpting is a non-invasive fat reduction treatment using cryolipolysis technology to freeze and eliminate fat cells. The procedure targets stubborn fat in areas like the abdomen, flanks, thighs, and under the chin. During treatment, a gel pad and applicator are applied to the target area, cooling it to between -11°C to -5°C. The session lasts 35-60 minutes per area. Fat cells crystallize and die, then are naturally eliminated by the body over 2-4 months. Patients may need multiple sessions for optimal results. The treatment has minimal downtime and patients can return to normal activities immediately."
+  },
+  {
+    "id": "doc_008",
+    "title": "Chemical Peel Types and Benefits",
+    "content": "Chemical peels use acid solutions to exfoliate skin and improve texture, tone, and appearance. Three main types exist: superficial peels (alpha-hydroxy acids like glycolic acid, 20-30% concentration) penetrate only the epidermis and treat fine lines and acne; medium peels (trichloroacetic acid, 35-50% concentration) reach the upper dermis for moderate wrinkles and pigmentation; deep peels (phenol) penetrate the lower dermis for severe wrinkles and scars. Superficial peels require no downtime, medium peels need 5-7 days recovery, and deep peels require 2-3 weeks. All peels increase sun sensitivity requiring strict SPF 30+ sunscreen use."
+  },
+  {
+    "id": "doc_009",
+    "title": "Laser Hair Removal Technology",
+    "content": "Laser hair removal uses concentrated light beams to target melanin in hair follicles, damaging them to inhibit future growth. Common laser types include Alexandrite (best for light-medium skin), Diode (versatile for most skin types), Nd:YAG (safe for darker skin), and Ruby (light skin, dark hair only). Treatment requires 6-8 sessions spaced 4-6 weeks apart because hair grows in cycles and lasers only affect actively growing hair (anagen phase). Patients must avoid sun exposure and not wax or pluck hair between sessions (shaving is allowed). Results are long-lasting with 80-90% permanent reduction, though maintenance sessions may be needed annually."
+  },
+  {
+    "id": "doc_010",
+    "title": "Microneedling Skin Rejuvenation",
+    "content": "Microneedling, also called collagen induction therapy, uses fine needles to create controlled micro-injuries in the skin, triggering the body's wound healing process and stimulating collagen and elastin production. The procedure treats acne scars, fine lines, wrinkles, large pores, and uneven skin texture. Needle depths range from 0.5mm (superficial) to 2.5mm (deep) depending on the treatment area and concern. A series of 3-6 treatments spaced 4-6 weeks apart is typical. Downtime is 24-48 hours with redness and minor swelling. Results improve over 6 months as new collagen forms. Combining microneedling with platelet-rich plasma (PRP) or growth factors enhances results."
+  },
+  {
+    "id": "doc_011",
+    "title": "Cedar Policy Validation and Testing",
+    "content": "Testing Cedar policies requires both static validation and runtime testing. Cedar's schema validation ensures policies reference valid entity types and attributes. The Cedar CLI provides a validation command that checks syntax and type correctness. For runtime testing, create test entities representing various scenarios - authorized users, unauthorized users, edge cases with missing attributes. Use the Cedar authorizer API to evaluate policies against test requests. Common testing patterns include: verify permit policies allow intended access, verify forbid policies block forbidden access, test attribute conditions with boundary values, and verify policy precedence when multiple policies apply."
+  },
+  {
+    "id": "doc_012",
+    "title": "Dermal Filler Types and Applications",
+    "content": "Dermal fillers are injectable substances that restore volume and smooth wrinkles. Hyaluronic acid fillers (Juvederm, Restylane) are most common, lasting 6-18 months and reversible with hyaluronidase. Calcium hydroxylapatite fillers (Radiesse) last 12-18 months and stimulate collagen. Poly-L-lactic acid (Sculptra) is a biostimulator lasting 2+ years. Common treatment areas include nasolabial folds, marionette lines, lips, cheeks, and under-eye hollows. The procedure takes 15-30 minutes with results visible immediately, improving over 2 weeks as swelling subsides. Proper injection technique is crucial to avoid complications like vascular occlusion. Patients should avoid blood thinners for 1 week before treatment to minimize bruising."
+  },
+  {
+    "id": "doc_013",
+    "title": "Screen Reader Compatibility for Web Applications",
+    "content": "Screen readers like JAWS, NVDA, and VoiceOver allow blind users to navigate websites through audio feedback. To ensure compatibility, use semantic HTML elements (nav, main, article, aside) instead of generic divs. Provide descriptive alt text for images, excluding decorative images with alt=''. Use ARIA labels for dynamic content and custom widgets. Ensure proper heading hierarchy (h1-h6) for document structure. Form inputs need associated labels using the label element or aria-label. Dynamic content updates require aria-live regions to announce changes. Skip navigation links help users bypass repetitive content. Test with actual screen readers, not just automated tools, as they may miss context-dependent issues."
+  },
+  {
+    "id": "doc_014",
+    "title": "FAISS Vector Similarity Search",
+    "content": "FAISS (Facebook AI Similarity Search) is a library for efficient similarity search of dense vectors. It supports both exact search using IndexFlatL2 or IndexFlatIP and approximate search with IndexIVFFlat, IndexHNSW, and IndexPQ for larger datasets. For CPU usage, IndexFlatL2 provides exact L2 distance search and works well for up to 1M vectors. IndexIVFFlat uses inverted file indexing with k-means clustering to partition the vector space, reducing search time. The nprobe parameter controls search accuracy vs speed tradeoff. FAISS requires vectors to be float32 numpy arrays with consistent dimensionality. Adding vectors uses the add() method, and searching uses search(query_vectors, k) returning distances and indices."
+  },
+  {
+    "id": "doc_015",
+    "title": "BM25 Ranking Algorithm",
+    "content": "BM25 (Best Matching 25) is a probabilistic ranking function for information retrieval based on term frequency and document length. The algorithm scores documents based on query term appearance, with diminishing returns for term frequency (controlled by k1 parameter, typically 1.2-2.0) and document length normalization (controlled by b parameter, typically 0.75). BM25 improves over TF-IDF by preventing score saturation when terms appear many times. The rank_bm25 Python library implements BM25 efficiently. Usage involves tokenizing documents, creating a BM25Okapi object with the document tokens, then scoring queries with get_scores() or ranking with get_top_n(). BM25 excels at keyword matching and works well for precise factual queries."
+  }
+]

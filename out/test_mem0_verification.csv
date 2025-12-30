@@ -1,0 +1,11 @@
+backend,scenario,mean_latency_ms,accuracy,mean_similarity
+mem0,conditional_memory_updates,10455.913486,0.75,0.783848
+mem0,cross_session_recall,3909.514667,0.0,0.614345
+mem0,degradation_resilience,7451.1176,1.0,1.0
+mem0,memory_editing_governance,5730.937733,1.0,0.667624
+mem0,memory_scalability,12808.136113,0.666667,0.671549
+mem0,multi_fact_inference,8171.46105,1.0,1.0
+mem0,personality_consistency,2803.286375,0.0,0.646025
+mem0,task_continuity,7359.706467,0.5,0.863086
+mem0,temporal_conflict_resolution,13200.88165,1.0,1.0
+mem0,AVERAGE,7987.883905,0.657407,0.805164
