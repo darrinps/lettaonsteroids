@@ -32,6 +32,9 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Claude Code
+.claude/settings.local.json
+
 # VS Code
 .vscode/
 
